@@ -25,10 +25,14 @@ const crearUsuario = async(req, res = response) => {
 
         await usuario.save();
 
+        //Generar Token
+        const token = await generarJWT(usuario.id, usuario.name)
+
         res.status(201).json({
             ok: true,
             uid: usuario.id,
-            name: usuario.name
+            name: usuario.name,
+            token
         }) 
     }catch(err){
         console.log(err)
@@ -50,7 +54,7 @@ const loginUsuario = async(req, res = response) => {
         if(!usuario){
             return res.status(400).json({
                 ok: false,
-                msg: 'El usuario no existe'
+                msg: 'El usuario no existe en la base de datos'
             })
         }
 
@@ -91,6 +95,8 @@ const revalidarToken = async(req, res = response) => {
 
     res.json({
         ok: true,
+        uid,
+        name,
         token
     })
 }
