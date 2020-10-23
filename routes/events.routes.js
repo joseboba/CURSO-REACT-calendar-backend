@@ -3,6 +3,7 @@ const { check } = require('express-validator')
 const router = Router();
 
 const { getEventos, crearEvento, actualizarEvento, eliminarEvento } = require('../controllers/events.controller');
+const {isDate} = require('../helpers/isDate');
 const {validarCampos} = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 
@@ -13,8 +14,8 @@ router.post(
             '/',
                 [
                     check('title', 'El titulo es necesario').notEmpty(),
-                    check('start', 'La fecha de inicio es necesario').isDate().notEmpty(),
-                    check('end', 'La fecha de finalizacion es necesario').isDate().notEmpty(),
+                    check('start', 'La fecha de inicio es necesario').custom(isDate).notEmpty(),
+                    check('end', 'La fecha de finalizacion es necesario').custom(isDate).notEmpty(),
                     validarCampos
                 ]
             ,crearEvento);
@@ -25,8 +26,8 @@ router.put(
             '/:id',
             [
                 check('title', 'El titulo es necesario').notEmpty(),
-                check('start', 'La fecha de inicio es necesario').isDate().notEmpty(),
-                check('end', 'La fecha de finalizacion es necesario').isDate().notEmpty(),
+                check('start', 'La fecha de inicio es necesario').custom(isDate).notEmpty(),
+                check('end', 'La fecha de finalizacion es necesario').custom(isDate).notEmpty(),
                 validarCampos
             ]
         ,actualizarEvento);
